@@ -11,7 +11,7 @@ for prj in ${LOGNAME}-cicd-pipeline-demo-jenkins \
            ${LOGNAME}-cicd-pipeline-demo-gogs \
            ${LOGNAME}-cicd-pipeline-demo-sonarcube; do
 
-  if [ $(projectExist ${prj}) == 1 ]; then
+  if [ $(projectExist ${prj}) == 0 ]; then
     echo "deleting project ${prj}"
     oc delete project ${prj}
   fi
