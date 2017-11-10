@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./init.sh
+. ./init.sh
 
 if [ "${LOGNMAME}" != "" ]; then
   echo "du dubeli, sätsch ilogge"
