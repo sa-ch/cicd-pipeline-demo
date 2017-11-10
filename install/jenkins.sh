@@ -2,6 +2,10 @@
 
 ./init.sh
 
+if [ "${LOGNMAME}" != "" ]; then
+  echo "du dubeli, sätsch ilogge"
+fi
+
 if [ $(projectExist ${LOGNAME}-cicd-pipeline-demo-jenkins) == 1 ]; then
   echo "project for jenkins already exists - skipping setup"
   exit
