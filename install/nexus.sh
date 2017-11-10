@@ -37,6 +37,16 @@ oc set probe dc/nexus3 --liveness --failure-threshold 3 --initial-delay-seconds 
 oc set probe dc/nexus3 --readiness --failure-threshold 3 --initial-delay-seconds 60 --get-url=http://:8081/repository/maven-public/
 oc rollout resume dc nexus3
 
+stat=0
+while [ $stat -lt 1 ]; do
+  echo "Waiting for nexus to become ready ...."
+  stat=`curl  "$(oc get route nexus3 --template='{{ .spec.host }}')" 2>/dev/null | grep -c "Nexus Repository Manager"`
+echo "STAT:$stat"
+
+  sleep 10
+done
+
+exit
 # init default repositories
 # default user admin/admin123
 # script src: https://raw.githubusercontent.com/wkulhanek/ocp_advanced_development_resources/master/nexus/setup_nexus3.sh
