@@ -2,15 +2,16 @@
 
 . ./init.sh
 
-if [ "${LOGNMAME}" == "" ]; then
+if [ "${LOGNAME}" == "" ]; then
   echo "du dubeli, sätsch ilogge"
+  exit
 fi
 
-if [ $(projectExist ${LOGNAME}-cicd-pipeline-demo-jenkins) == 1 ]; then
+if [ $(projectExist ${LOGNAME}-cicd-pipeline-demo-jenkins) != 1 ]; then
   echo "project for jenkins already exists - skipping setup"
   exit
 fi
-exit
+
 oc new-project ${LOGNAME}-cicd-pipeline-demo-jenkins --display-name "Shared Jenkins"
 oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2Gi --param VOLUME_CAPACITY=4Gi
 

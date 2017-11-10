@@ -2,11 +2,12 @@
 
 . ./init.sh
 
-if [ "${LOGNMAME}" == "" ]; then
+if [ "${LOGNAME}" == "" ]; then
   echo "du dubeli, sätsch ilogge"
+  exit
 fi
 
-if [ $(projectExist ${LOGNAME}-cicd-pipeline-demo-sonarqube) == 1 ]; then
+if [ $(projectExist ${LOGNAME}-cicd-pipeline-demo-sonarqube) != 1 ]; then
   echo "project for sonarqube already exists - skipping setup"
   exit
 fi
