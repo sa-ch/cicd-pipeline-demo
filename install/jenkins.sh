@@ -2,7 +2,7 @@
 
 . ./init.sh
 
-if [ "${LOGNMAME}" != "" ]; then
+if [ "${LOGNMAME}" == "" ]; then
   echo "du dubeli, sätsch ilogge"
 fi
 
