@@ -15,6 +15,14 @@ fi
 oc new-project ${LOGNAME}-cicd-pipeline-demo-sonarqube --display-name "Shared Sonarqube"
 oc new-app postgresql-persistent --param POSTGRESQL_USER=sonar --param POSTGRESQL_PASSWORD=sonar --param POSTGRESQL_DATABASE=sonar --param VOLUME_CAPACITY=4Gi -lapp=sonarqube_db
 
+oc rollout pause dc postgresql
+oc patch pvc postgresql -p "metadata:
+  name: postgresql
+  annotations:
+    volume.beta.kubernetes.io/storage-class: gluster-container"
+oc rollout resume dc postgresql
+
+
 # img src: https://github.com/wkulhanek/docker-openshift-sonarqube.git
 # default: admin/admin
 oc new-app wkulhanek/sonarqube:6.5 -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar -e SONARQUBE_JDBC_URL=jdbc:postgresql://postgresql/sonar -lapp=sonarqube
@@ -25,6 +33,8 @@ echo "apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: sonarqube-pvc
+  annotations:
+    volume.beta.kubernetes.io/storage-class: gluster-container  
 spec:
   accessModes:
   - ReadWriteOnce
