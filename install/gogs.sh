@@ -38,15 +38,13 @@ spec:
       storage: 4Gi" | oc create -f -
 
 oc set volume dc/gogs --add --overwrite --name=gogs-volume-1 --mount-path=/data/ --type persistentVolumeClaim --claim-name=gogs-data
+oc expose svc gogs
 
 # patch values in app.ini
-cp config/app.ini.template config/app.ini
 gogsroute=$(oc get route gogs --template='{{ .spec.host }}')
-sed "s+^\(ROOT_URL.*=\) *.*$+\1 $gogsroute+g" app.ini
+sed "s+^\(ROOT_URL.*=\) *.*$+\1 $gogsroute+g" config/app.ini.template > config/app.ini
 
 oc create configmap gogs --from-file=config/app.ini
 oc set volume dc/gogs --add --overwrite --name=config-volume -m /opt/gogs/custom/conf/ -t configmap --configmap-name=gogs
 
 rm config/app.ini
-
-oc expose svc gogs
