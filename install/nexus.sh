@@ -20,15 +20,17 @@ oc rollout pause dc nexus3
 oc patch dc nexus3 --patch='{ "spec": { "strategy": { "type": "Recreate" }}}'
 oc set resources dc nexus3 --limits=memory=2Gi --requests=memory=1Gi
 
-echo "apiVersion: v1 \
-kind: PersistentVolumeClaim \
-metadata: \
-  name: nexus-pvc \
-spec: \
-  accessModes: \
-  - ReadWriteOnce \
-  resources: \
-    requests: \
+echo "apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nexus-pvc
+  annotations:
+    volume.beta.kubernetes.io/storage-class: gluster-container
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
       storage: 4Gi" | oc create -f -
 
 oc set volume dc/nexus3 --add --overwrite --name=nexus3-volume-1 --mount-path=/nexus-data/ --type persistentVolumeClaim --claim-name=nexus-pvc
@@ -46,7 +48,6 @@ echo "STAT:$stat"
   sleep 10
 done
 
-exit
 # init default repositories
 # default user admin/admin123
 # script src: https://raw.githubusercontent.com/wkulhanek/ocp_advanced_development_resources/master/nexus/setup_nexus3.sh
