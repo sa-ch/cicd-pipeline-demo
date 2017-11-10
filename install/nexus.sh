@@ -34,4 +34,5 @@ oc rollout resume dc nexus3
 
 # init default repositories
 # default user admin/admin123
+# script src: https://raw.githubusercontent.com/wkulhanek/ocp_advanced_development_resources/master/nexus/setup_nexus3.sh
 ./init_nexus3.sh admin admin123 http://$(oc get route nexus3 --template='{{ .spec.host }}')
